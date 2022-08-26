@@ -1,12 +1,13 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { useEffect, useRef, useState } from "react";
+import Button from 'react-bootstrap/Button';
 import Map from "ol/Map";
 import View from "ol/View";
 import OSM from "ol/source/OSM";
 import TileLayer from "ol/layer/Tile";
 import "../styles/_liveLocation.css";
 import Geolocation from "ol/Geolocation";
-import { Circle as CircleStyle, Fill, Stroke, Style } from "ol/style";
+import { Circle as CircleStyle, Fill, Style } from "ol/style";
 import Feature from "ol/Feature";
 import Point from "ol/geom/Point";
 import { Vector as VectorLayer } from "ol/layer";
@@ -25,7 +26,7 @@ function LiveLocation() {
   );
 
   useEffect(() => {
-    //if (ref.current && !mapRef.current) {
+    if (ref.current && !mapRef.current) {
       setGeoLocation(
         new Geolocation({
           tracking: true,
@@ -40,14 +41,11 @@ function LiveLocation() {
       positionFeature.setStyle(
         new Style({
           image: new CircleStyle({
-            radius: 4,
+            radius: 3,
             fill: new Fill({
-              color: "red",
+              color: "#880808",
             }),
-            stroke: new Stroke({
-              color: "#7CFC00",
-              width: 2,
-            }),
+    
           }),
         })
       );
@@ -66,16 +64,16 @@ function LiveLocation() {
       });
 
       mapRef.current = map;
-    //}
+    }
   }, []);
 
-  const markMyLocation = () => {
-    alert("Your Location coordinates " + geolocation.getPosition());
+  const viewLiveLocation = () => {
+    alert("Live Location coordinates " + geolocation.getPosition());
     const coordinates = geolocation.getPosition();
     setViewPoint(
       new View({
         center: coordinates,
-        zoom: 2,
+        zoom: 5,
       })
     );
     position.setGeometry(coordinates ? new Point(coordinates) : null);
@@ -83,9 +81,11 @@ function LiveLocation() {
 
   return (
     <>
-      <button className="btn" onClick={markMyLocation}>
-        My Location
-      </button>
+     
+      <Button onClick={viewLiveLocation}>
+        Live Location
+      </Button>
+
       <div ref={ref} className="map"></div>
     </>
   );
